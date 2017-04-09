@@ -1,0 +1,79 @@
+<?php
+
+class db {
+
+
+	private $_instance;
+	private $_host="localhost";
+	private $_dbname="";
+	private $_user="root";
+	private $_pass="";
+
+
+	private $_num_of_rows;
+
+	public function __get($property){
+
+			$_protected_property_name = '_' . $property ;
+			if(property_exists($this, $_protected_property_name)){
+
+				return $this->$_protected_property_name;
+			}
+
+			trigger_error('Undefined property via __get: '.$property);
+			return NULL;
+	}
+	
+	public function __set($name, $value){
+
+		$protected_property_name = '_' . $name ;
+		if(property_exists($this, $protected_property_name)){
+
+			$this->$protected_property_name = $value;
+		}
+	}
+
+	public function __construct(){
+		
+		$_instance =mysql_connect($this->_host,$this->_user,$this->_pass);
+		mysql_select_db($this->_dbname);
+		
+	}
+
+	public function execute($sql){
+
+		if(!$result = mysql_query($sql)){
+
+			$error = "Failed to execute the query!";
+			throw new Exception($error);
+		}
+		else {
+
+			$this->_num_of_rows = mysql_num_rows($result);
+			return true;
+		}
+	}
+
+	public function fetch_result($sql){
+
+		if($result = mysql_query($sql)){
+			while($row = mysql_fetch_array($result)){
+
+				$data[] = $row ;
+			}
+
+			return $data;
+		}
+		else
+			return array();
+	}
+
+	public function close(){
+
+		mysql_close();
+	}
+
+
+}
+
+?>

@@ -1,0 +1,20 @@
+.loading{
+
+			position:fixed;
+			/*background-color:#a7a7a7;*/
+			background-color: #3a3a3a;
+			background-image: url(../img/loading-1.gif);
+			background-position: center; 
+			background-repeat: no-repeat;
+			color:#000;
+			/*border-radius: 2px;*/
+			text-align: center;
+			/*top: 50%;
+			left:50%;*/
+			height:100%;
+			width:100%;
+			z-index:999999;	
+			opacity: 0.8;	
+			
+			
+		}

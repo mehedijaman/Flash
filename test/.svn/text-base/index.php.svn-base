@@ -1,0 +1,93 @@
+<?php 
+include('class.db.inc');
+class category{
+
+	private $_categoryid;
+	private $_categoryname;
+	private $_parentid;
+	private $_isincludemenu;
+
+
+	public function __get($property_name){
+
+		$private_property_name = '_'.$property_name;
+		if(property_exists($this, $private_property_name)){
+			return $this->$private_property_name;
+		}		trigger_error('Undefined property named through __get(), field name='.$property_name);
+		return null;
+
+	}
+
+
+	public function __set($property_name, $value){
+
+		$private_property_name = '_'.$property_name;
+		if(property_exists($this, $private_property_name)){
+			$this->$private_property_name = $value;
+		}
+	}
+	public function create($data){
+		$objDB = new db;
+
+		$this->_categoryname = $data['categoryname'];
+		$this->_parentid = $data['parentid'];
+		$this->_isincludemenu = $data['isincludemenu'];
+		$sql = "INSERT INTO category(
+			categoryname,parentid,isincludemenu )";
+		$sql.= " VALUES('$this->_categoryname',$this->_parentid,$this->_isincludemenu)";
+		$objDB->execute($sql);
+		$this->_categoryid = mysql_insert_id();
+
+		$objDB->close();
+	}
+	public function get_by_pk($id){
+		$sql = "SELECT * FROM category WHERE categoryid = $id";
+		$objDB = new db;
+
+		$data = $objDB->fetch_result($sql);
+		$this->_categoryid = $id;
+		$this->_categoryname = $data[0]['categoryname'];
+		$this->_parentid = $data[0]['parentid'];
+		$this->_isincludemenu = $data[0]['isincludemenu'];
+		$objDB->close();
+	}
+	public function delete(){
+		$sql = "DELETE FROM category WHERE categoryid = $this->_categoryid";
+		$objDB = new db;
+		$objDB->execute($sql);
+		$objDB->close();
+	}
+	public function update(){
+		$sql = "UPDATE category SET 
+		categoryname = '$this->_categoryname',		
+		parentid = $this->_parentid,		
+		isincludemenu = $this->_isincludemenu 
+		WHERE categoryid = $this->_categoryid";
+		$objDB = new db;
+		$objDB->execute($sql);
+		$objDB->close();
+	}
+}
+
+ 
+
+ 
+
+ $obj = new category;
+
+ $data = array(
+ 	'categoryname' => 'Electronics',
+	'parentid'=> 1,
+	'private' => 1,
+	'isincludemenu' => 1
+ 	);
+
+ //$obj->create($data);
+
+ $obj->get_by_pk(2);
+echo $obj->__get('categoryname');
+$obj->__set('categoryname','sonu is modu');
+$obj->update();
+ //$obj->__set('categoryname','Toiletriese');
+
+ ?>
