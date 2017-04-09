@@ -1,2 +1,2 @@
 # Flash
-Flash :: PHP CRUD  Model generator
+PHP CRUD  Model generator
